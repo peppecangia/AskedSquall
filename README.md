@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Compagno D&D (3.5e e 5e)
 
-## Getting Started
+Companion local-first per D&D 3.5e e 5e. Primo passo: tipi base, adapter delle regole e scheda personaggio con switch di edizione.
 
-First, run the development server:
+## Avvio
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm test           # test unitari delle regole (Vitest)
+npm run typecheck && npm run lint && npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Struttura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `src/types/` interfacce di base: `Character` (unione 5e / 3.5e), `Ruleset`, `Item`, `Spell`.
+- `src/lib/rulesets/` regole come funzioni pure, una cartella per edizione (`dnd5e/`, `dnd35e/`) più `shared/`.
+  `index.ts` è il registro: una nuova edizione è un adapter che implementa `Ruleset` più una voce in `RULESETS`.
+- `src/components/character-sheet/` la scheda; legge solo il modello `CharacterSheet` prodotto dall'adapter.
+- `src/components/ui/` componenti in stile Shadcn (`components.json` pronto per `npx shadcn add`).
+- `src/stores/` stato Zustand (persistito in localStorage per ora; Dexie arriverà col modulo dati).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scelte e semplificazioni
 
-## Learn More
+- PF massimi: dado pieno al 1° livello, poi media arrotondata per eccesso (sovrascrivibile con `maxOverride`).
+- 3.5e: il costo dei gradi dipende dal fatto che l'abilità sia di classe per *una qualsiasi* delle classi; i punti per livello usano l'Int attuale.
+- 3.5e: bonus del Monaco alla CA (Sag) non ancora modellato.
+- Cambiare edizione converte il personaggio; la versione precedente resta salvata, quindi tornare indietro non perde nulla.
 
-To learn more about Next.js, take a look at the following resources:
+## Licenze
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Contenuti 5e dall'SRD 5.1, Creative Commons CC-BY-4.0.
+- Contenuti 3.5e dall'SRD 3.5, Open Game License v1.0a (testo integrale da aggiungere in `LICENSE-OGL.md`).
+- Nessun contenuto protetto da marchio.
